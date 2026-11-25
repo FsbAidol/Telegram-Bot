@@ -39,7 +39,9 @@ def main_menu(mini_app_url: str = "") -> InlineKeyboardMarkup:
         [(f"{Emoji.STATS} Скорость", "c:router:speed")],
         [(f"{Emoji.HELP} Помощь", "c:menu:help")],
     ]
-    if mini_app_url:
+    # Telegram требует HTTPS для Web App: при http-URL (например localhost)
+    # кнопку не рендерим — бот не должен падать на некорректной ссылке.
+    if mini_app_url.startswith("https://"):
         rows.append([
             InlineKeyboardButton(
                 text=f"{Emoji.SHINE} 🎨 Эмодзи-студия",

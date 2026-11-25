@@ -143,6 +143,16 @@ class TestKeyboards(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(webapp_buttons[0].web_app.url, "https://example.org/mini-app")
         self.assertIn("🎨", webapp_buttons[0].text)
 
+    def test_main_menu_http_url_hides_web_app(self) -> None:
+        # Telegram не принимает http:// WebApp-URL — кнопка не должна рендериться
+        for url in ("", "http://localhost:8080"):
+            markup = main_menu(url)
+            webapp_buttons = [
+                btn for row in markup.inline_keyboard for btn in row
+                if btn.web_app is not None
+            ]
+            self.assertEqual(webapp_buttons, [], url)
+
     def test_router_menu_dynamic(self) -> None:
         mock = MockRouter()
 

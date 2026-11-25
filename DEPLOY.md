@@ -121,7 +121,16 @@ curl -s http://127.0.0.1:8080/api/emoji | head -c 120
 
 ### 6. nginx + HTTPS для мини-приложения
 
-Telegram требует **HTTPS** для Mini App. Подменяем плейсхолдер домена:
+Telegram требует **HTTPS** для Mini App. Без домена можно получить https-ссылку
+за минуту через туннель Cloudflare (бесплатно, без регистрации домена):
+
+```bash
+apt install -y cloudflared        # или скачать бинарник с cloudflare.com
+cloudflared tunnel --url http://localhost:8080
+# напечатается URL вида https://xxx.trycloudflare.com — это и есть MINI_APP_URL
+```
+
+С доменом — обычный путь (nginx + Let's Encrypt). Подменяем плейсхолдер домена:
 
 ```bash
 sudo sed -i 's/your-domain.example.com/'"$YOUR_DOMAIN"'/g' deploy/nginx-emoji-studio.conf
@@ -195,3 +204,4 @@ sudo systemctl restart telegram-bot emoji-studio
 | Java не компилируется | Установлен только JRE — нужен `openjdk-17-jdk-headless` (javac) |
 | `venv не создан ... ensurepip is not available` | На Ubuntu/Debian не установлен `python3-venv`: `apt install -y python3-venv` (или `python3.10-venv`), затем удалить старый `.venv` и создать новый |
 | `requirements.txt` / `.env.example` не найдены | Команды выполнены не внутри каталога репозитория — `cd` в папку после `git clone` |
+| `Web App URL 'http://...' is invalid: Only HTTPS links are allowed` | `MINI_APP_URL` должен начинаться с `https://` (туннель cloudflared или домен + certbot). Если HTTPS ещё нет — оставьте `MINI_APP_URL` пустым: кнопка скроется и бот будет работать |
