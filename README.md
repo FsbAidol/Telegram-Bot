@@ -49,6 +49,25 @@ python run.py
 
 Логи: консоль и `logs/bot.log`.
 
+## 📦 Установка на сервер
+
+Готовый deploy-пакет в `deploy/` — пошаговый гид, авто-установщик, systemd-сервисы
+и nginx+HTTPS:
+
+- 📖 **`DEPLOY.md`** — полное руководство (ручная установка и автоматическая)
+- ⚡ **`deploy/install.sh`** — один фрагмент кода делает всё: пакеты, клонирование,
+  venv, `.env`, systemd, nginx, Let's Encrypt, запуск
+- 🔄 **`deploy/update.sh`** — обновление на сервере
+- 📜 **`deploy/telegram-bot.service`**, **`deploy/emoji-studio.service`** — сервисы systemd
+- 🌐 **`deploy/nginx-emoji-studio.conf`** — HTTPS-проксия для мини-приложения
+
+```bash
+sudo bash deploy/install.sh \
+  --repo https://github.com/FsbAidol/Telegram-Bot.git \
+  --domain your-domain.example.com \
+  --email you@example.com
+```
+
 ## 🔌 Подключение роутера
 
 1. В приложении **TP-Link Tether** войдите в аккаунт TP-Link и добавьте Archer C80.
