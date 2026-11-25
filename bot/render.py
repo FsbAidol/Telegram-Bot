@@ -32,11 +32,17 @@ def _bar(value: float, vmax: float, width: int = 10) -> str:
 def home_text(status: RouterStatus) -> str:
     state = f"{Emoji.CHECK} Онлайн" if status.online else f"{Emoji.CROSS} Офлайн"
     mode = "☁️ Cloud" if status.mode == "cloud" else "🎭 Демо-режим"
-    return (
-        f"{Emoji.SHINE} <b>Управление роутером</b>\n"
-        f"{Emoji.NET} <b>{esc(status.alias)}</b> — {Emoji.DIAMOND} {esc(status.model)}\n"
-        f"{state} · {mode} · {status.total_clients} {Emoji.CLIENTS}"
-    )
+    lines = [
+        f"{Emoji.SHINE} <b>Управление роутером</b>",
+        f"{Emoji.NET} <b>{esc(status.alias)}</b> — {Emoji.DIAMOND} {esc(status.model)}",
+        f"{state} · {mode} · {status.total_clients} {Emoji.CLIENTS}",
+    ]
+    if status.mode == "mock":
+        lines.append(
+            f"{Emoji.TARGET} Для реального роутера: в .env настройте "
+            f"TPLINK_MODE=cloud, TPLINK_USER, TPLINK_PASSWORD"
+        )
+    return "\n".join(lines)
 
 
 # ---------- Статус роутера ----------

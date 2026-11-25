@@ -203,6 +203,24 @@ class TestRouterServiceMock(unittest.IsolatedAsyncioTestCase):
         service = RouterService(make_settings(tplink_mode="cloud"))
         self.assertEqual(service.mode, "mock")  # без данных аккаунта — mock
 
+    def test_mode_reason(self) -> None:
+        service = RouterService(make_settings(tplink_mode="mock"))
+        self.assertIn("TPLINK_MODE", service.mode_reason())
+
+        service = RouterService(make_settings(tplink_mode="cloud"))
+        self.assertIn("TPLINK_USER", service.mode_reason())
+
+        service = RouterService(make_settings(
+            tplink_mode="cloud", tplink_user="u@tplinkcloud.com"
+        ))
+        self.assertIn("TPLINK_PASSWORD", service.mode_reason())
+
+        service = RouterService(make_settings(
+            tplink_mode="cloud", tplink_user="u@tplinkcloud.com", tplink_password="pw"
+        ))
+        self.assertEqual(service.mode, "cloud")
+        self.assertIn("cloud", service.mode_reason())
+
 
 class TestHandlers(unittest.IsolatedAsyncioTestCase):
     def test_callback_flow(self) -> None:

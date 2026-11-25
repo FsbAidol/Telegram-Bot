@@ -439,6 +439,16 @@ class RouterService:
             and self._settings.tplink_password
         ) else "mock"
 
+    def mode_reason(self) -> str:
+        """Диагностика: почему выбран текущий режим роутера (для логов)."""
+        if self._settings.tplink_mode != "cloud":
+            return "TPLINK_MODE != cloud (в .env нужно TPLINK_MODE=cloud)"
+        if not self._settings.tplink_user:
+            return "TPLINK_USER не задан"
+        if not self._settings.tplink_password:
+            return "TPLINK_PASSWORD не задан"
+        return "cloud — реальный роутер через TP-Link Cloud"
+
     async def _get_client(self) -> TpLinkCloudClient:
         async with self._lock:
             if self._client is None:

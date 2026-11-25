@@ -82,7 +82,7 @@ async def run() -> None:
         registry=build_registry(),
         service=RouterService(settings),
     )
-    logger.info("Запуск бота (режим роутера: %s)", app.service.mode)
+    logger.info("Запуск бота (режим роутера: %s — %s)", app.service.mode, app.service.mode_reason())
 
     bot = Bot(
         token=settings.bot_token,
