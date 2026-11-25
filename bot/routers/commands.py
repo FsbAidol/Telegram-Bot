@@ -4,7 +4,7 @@ from __future__ import annotations
 import time
 
 from bot.keyboards.emoji import Emoji
-from bot.keyboards.menus import MAIN_MENU
+from bot.keyboards.menus import main_menu
 from bot.registry import AppContext, RouteArgs, RouterRegistry
 from bot.render import home_text, status_text
 from bot.routers._common import render
@@ -14,7 +14,8 @@ def register(registry: RouterRegistry) -> None:
     @registry.command("start")
     async def cmd_start(actor, ctx: AppContext, args: RouteArgs) -> None:
         status = await ctx.service.get_status()
-        await render(actor, f"{Emoji.SHINE} <b>Добро пожаловать!</b>\n" + home_text(status), MAIN_MENU)
+        await render(actor, f"{Emoji.SHINE} <b>Добро пожаловать!</b>\n" + home_text(status),
+                     main_menu(ctx.settings.mini_app_url))
 
     @registry.command("status")
     async def cmd_status(actor, ctx: AppContext, args: RouteArgs) -> None:

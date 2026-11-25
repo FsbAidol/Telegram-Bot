@@ -10,7 +10,7 @@ import unittest
 from aiogram.types import InlineKeyboardMarkup
 
 from bot.config import Settings
-from bot.keyboards.menus import MAIN_MENU, build_router_menu
+from bot.keyboards.menus import MAIN_MENU, build_router_menu, main_menu
 from bot.registry import AppContext, RouteArgs, RouterRegistry
 from bot.routers import commands, menu, router_control
 from bot.services.tplink import MockRouter, RouterService
@@ -131,6 +131,17 @@ class TestKeyboards(unittest.IsolatedAsyncioTestCase):
         self.assertIn("c:router:home", datas)
         self.assertTrue(all(btn.text.startswith(("🎮", "📶", "📊", "❓"))
                             for row in markup.inline_keyboard for btn in row))
+
+    def test_main_menu_with_web_app(self) -> None:
+        from aiogram.types import WebAppInfo
+        markup = main_menu("https://example.org/mini-app")
+        webapp_buttons = [
+            btn for row in markup.inline_keyboard for btn in row
+            if btn.web_app is not None
+        ]
+        self.assertEqual(len(webapp_buttons), 1)
+        self.assertEqual(webapp_buttons[0].web_app.url, "https://example.org/mini-app")
+        self.assertIn("🎨", webapp_buttons[0].text)
 
     def test_router_menu_dynamic(self) -> None:
         mock = MockRouter()

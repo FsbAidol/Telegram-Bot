@@ -64,6 +64,22 @@ python run.py
 > `getDeviceBasicFmt`, `setDeviceWifi` (index: 0 = 2.4 ГГц, 1 = 5 ГГц, 2 = Guest),
 > `reboot`, список клиентов (`getDeviceClientList` с авто-откатом к альтернативам).
 
+## 🎨 Эмодзи-студия (мини-приложение)
+
+Отдельный Telegram-мини-приложение в `mini-app/`: галерея премиум-эмодзи с
+плавными SVG-анимациями, тёмный премиум-интерфейс и Java-бэкенд.
+
+- **`mini-app/server/`** — Java-бэкенд на чистом JDK (`com.sun.net.httpserver`,
+  без зависимостей): статика + API `/api/emoji`, `/api/session`
+  (валидация Telegram WebApp initData по HMAC-SHA256) + CORS.
+- **`mini-app/web/`** — фронтендер без сборки: 12 анимированных SVG-эмодзи
+  (SMIL-циклы), движок JS-скриптов анимации на `requestAnimationFrame`,
+  анимированная аурора, частицы, модалка, копипаст.
+- Запуск: `cd mini-app && ./run.sh` (Java) или `python3 dev_server.py` (dev);
+  подробности — в `mini-app/README.md`.
+- Подключение: в `.env` бота `MINI_APP_URL=https://...` → в главном меню
+  появится кнопка **🎨 Эмодзи-студия** (`WebAppInfo`).
+
 ## 🎮 Интерфейс
 
 | Кнопка | Действие |

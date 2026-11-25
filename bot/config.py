@@ -18,6 +18,7 @@ class Settings:
     tplink_user: str = ""
     tplink_password: str = ""
     tplink_alias: str = ""              # алиас роутера в аккаунте TP-Link (необязательно)
+    mini_app_url: str = ""              # URL Telegram-мини-приложения (кнопка WebApp)
     admin_ids: frozenset[int] = frozenset()
     stats_interval: int = 60            # секунды, через которые кэш статуса роутера обновляется
 
@@ -51,6 +52,7 @@ class Settings:
             tplink_user=os.getenv("TPLINK_USER", "").strip(),
             tplink_password=os.getenv("TPLINK_PASSWORD", "").strip(),
             tplink_alias=os.getenv("TPLINK_ALIAS", "").strip(),
+            mini_app_url=os.getenv("MINI_APP_URL", "").strip(),
             admin_ids=admins,
             stats_interval=interval,
         )

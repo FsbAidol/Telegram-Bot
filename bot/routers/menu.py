@@ -1,7 +1,7 @@
 """Раздел «Меню»: главное меню и помощь."""
 from __future__ import annotations
 
-from bot.keyboards.menus import MAIN_MENU
+from bot.keyboards.menus import MAIN_MENU, main_menu
 from bot.registry import AppContext, RouteArgs, RouterRegistry
 from bot.render import HELP_TEXT, home_text
 from bot.routers._common import render
@@ -11,7 +11,7 @@ def register(registry: RouterRegistry) -> None:
     @registry.route("menu", "home")
     async def menu_home(actor, ctx: AppContext, args: RouteArgs) -> None:
         status = await ctx.service.get_status()
-        await render(actor, home_text(status), MAIN_MENU)
+        await render(actor, home_text(status), main_menu(ctx.settings.mini_app_url))
 
     @registry.route("menu", "help")
     async def menu_help(actor, ctx: AppContext, args: RouteArgs) -> None:

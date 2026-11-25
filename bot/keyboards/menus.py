@@ -7,6 +7,7 @@ from aiogram.types import (
     KeyboardButton,
     ReplyKeyboardMarkup,
     ReplyKeyboardRemove,
+    WebAppInfo,
 )
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
@@ -15,23 +16,40 @@ from bot.services.tplink import RouterStatus
 
 # ---------- Шорткат для сборки клавиатур ----------
 
-def _kb(rows: list[list[tuple[str, str]]]) -> InlineKeyboardMarkup:
+def _kb(rows: list[list[InlineKeyboardButton | tuple[str, str]]]) -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     for row in rows:
-        builder.row(*[InlineKeyboardButton(text=text, callback_data=data) for text, data in row])
+        cells: list[InlineKeyboardButton] = []
+        for cell in row:
+            if isinstance(cell, InlineKeyboardButton):
+                cells.append(cell)
+            else:
+                text, data = cell
+                cells.append(InlineKeyboardButton(text=text, callback_data=data))
+        builder.row(*cells)
     return builder.as_markup()
 
 
 # ---------- Главное меню ----------
 
-MAIN_MENU = _kb(
-    [
+def main_menu(mini_app_url: str = "") -> InlineKeyboardMarkup:
+    rows: list[list[InlineKeyboardButton | tuple[str, str]]] = [
         [(f"{Emoji.MENU} Главное", "c:menu:home")],
         [(f"{Emoji.NET} Роутер", "c:router:home")],
         [(f"{Emoji.STATS} Скорость", "c:router:speed")],
         [(f"{Emoji.HELP} Помощь", "c:menu:help")],
     ]
-)
+    if mini_app_url:
+        rows.append([
+            InlineKeyboardButton(
+                text=f"{Emoji.SHINE} 🎨 Эмодзи-студия",
+                web_app=WebAppInfo(url=mini_app_url),
+            )
+        ])
+    return _kb(rows)
+
+
+MAIN_MENU = main_menu()
 
 
 # ---------- Меню роутера (динамическое: ✅/❌ по текущим сетям) ----------

@@ -1,0 +1,14 @@
+[
+  {"id": "fire",    "name": "Огонь",      "unicode": "🔥", "tags": ["огонь", "жар", "пламя", "flame", "hot"],      "svg": "emoji/fire.svg",     "anim": "flicker"},
+  {"id": "bolt",    "name": "Молния",     "unicode": "⚡️", "tags": ["молния", "энергия", "eletric", "light"],       "svg": "emoji/bolt.svg",     "anim": "pulse"},
+  {"id": "sparkle", "name": "Блеск",      "unicode": "✨", "tags": ["блеск", "звёзды", "sparkle", "shine"],         "svg": "emoji/sparkle.svg",  "anim": "twinkle"},
+  {"id": "rocket",  "name": "Ракета",     "unicode": "🚀", "tags": ["ракета", "полёт", "rocket", "launch"],         "svg": "emoji/rocket.svg",   "anim": "float"},
+  {"id": "diamond", "name": "Алмаз",      "unicode": "💎", "tags": ["алмаз", "бриллиант", "diamond", "gem"],        "svg": "emoji/diamond.svg",  "anim": "glow"},
+  {"id": "rainbow", "name": "Радуга",     "unicode": "🌈", "tags": ["радугега", "цвета", "rainbow", "colors"],      "svg": "emoji/rainbow.svg",  "anim": "wave"},
+  {"id": "gamepad", "name": "Геймпад",    "unicode": "🎮", "tags": ["игры", "геймпад", "game", "controller"],       "svg": "emoji/gamepad.svg",  "anim": "pulse"},
+  {"id": "target",  "name": "Мишень",     "unicode": "🎯", "tags": ["цель", "мишень", "target", "goal"],            "svg": "emoji/target.svg",   "anim": "pulse"},
+  {"id": "dizzy",   "name": "Головоболь", "unicode": "💫", "tags": ["головокружение", "звёзды", "dizzy", "stars"],   "svg": "emoji/dizzy.svg",    "anim": "spin"},
+  {"id": "star",    "name": "Звезда",     "unicode": "🌟", "tags": ["звезда", "звёзды", "star", "glow"],             "svg": "emoji/star.svg",     "anim": "pulse"},
+  {"id": "heart",   "name": "Сердце",     "unicode": "💜", "tags": ["сердце", "любовь", "heart", "love"],            "svg": "emoji/heart.svg",    "anim": "pulse"},
+  {"id": "party",   "name": "Праздник",   "unicode": "🎉", "tags": ["праздник", "веселье", "party", "celebration"], "svg": "emoji/party.svg",    "anim": "confetti"}
+]
