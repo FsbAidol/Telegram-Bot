@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0f1e">
+  <title>🎨 Эмодзи-студия</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Декоративный фон: анимированные аурора + частицы -->
+  <canvas id="particles"></canvas>
+  <div class="aurora" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
+  </div>
+
+  <main class="shell">
+    <header class="hero">
+      <div class="hero-logo" id="hero-logo"></div>
+      <h1 class="hero-title">Эмодзи-студия</h1>
+      <p class="hero-sub">Премиум-эмодзи с плавными SVG-анимациями — нажми, чтобы скопировать</p>
+    </header>
+
+    <div class="search-bar">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none">
+        <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+        <path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <input id="search" type="text" placeholder="Поиск по названию или тегам…" autocomplete="off">
+    </div>
+
+    <section id="grid" class="grid" aria-label="Галерея эмодзи"></section>
+    <p id="empty" class="empty" hidden>🫥 Ничто не нашлось — попробуй другой запрос</p>
+
+    <footer class="footer">
+      <span>⚡ SVG + SMIL · плавные анимации · мини-приложение для Telegram</span>
+    </footer>
+  </main>
+
+  <!-- Модалка просмотра с большой анимацией -->
+  <div id="modal" class="modal" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-card">
+      <button class="modal-close" data-close aria-label="Закрыть">✕</button>
+      <div class="modal-preview" id="modal-preview"></div>
+      <h2 id="modal-title" class="modal-title"></h2>
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="modal-copy-unicode">📋 Скопировать эмодзи</button>
+        <button class="btn" id="modal-copy-svg">💾 Скопировать SVG</button>
+      </div>
+      <p class="modal-hint">Скопируй эмодзи в Telegram-бота или любое приложение</p>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" hidden></div>
+
+  <script src="js/emoji-script.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="rk-body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#cbd5e1"/>
+    </linearGradient>
+    <linearGradient id="rk-flame" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff1a8"/>
+      <stop offset="1" stop-color="#ff6b1a"/>
+    </linearGradient>
+    <radialGradient id="rk-glow">
+      <stop offset="0" stop-color="#fb923c" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#fb923c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="#151b2e"/>
+  <circle cx="50" cy="58" r="40" fill="url(#rk-glow)"/>
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="0 0; 0 -4; 0 0"
+                      dur="2.4s" repeatCount="indefinite" additive="sum"/>
+    <path d="M50 20 C60 20 66 30 66 42 C66 54 60 62 50 66 C40 62 34 54 34 42 C34 30 40 20 50 20 Z"
+          fill="url(#rk-body)" stroke="#94a3b8" stroke-width="2"/>
+    <path d="M50 20 C56 22 61 30 63 40 L66 42 L62 38 C60 28 55 24 50 22 Z" fill="#ef4444"/>
+    <path d="M34 42 C28 46 24 54 26 60 L34 58 C33 52 34 46 36 44 Z" fill="#ef4444"/>
+    <path d="M66 42 C72 46 76 54 74 60 L66 58 C67 52 66 46 64 44 Z" fill="#ef4444"/>
+    <circle cx="50" cy="42" r="7" fill="#38bdf8" stroke="#0ea5e9" stroke-width="2"/>
+    <circle cx="50" cy="42" r="3" fill="#bae6fd"/>
+    <path d="M44 64 C46 74 48 82 50 88 C52 82 54 74 56 64 C54 62 46 62 44 64 Z" fill="url(#rk-flame)">
+      <animate attributeName="d" dur="0.5s" repeatCount="indefinite"
+               values="M44 64 C46 74 48 82 50 88 C52 82 54 74 56 64 C54 62 46 62 44 64 Z;
+                       M42 64 C46 76 48 86 50 90 C52 86 54 76 58 64 C56 62 46 62 42 64 Z;
+                       M44 64 C46 74 48 82 50 88 C52 82 54 74 56 64 C54 62 46 62 44 64 Z"/>
+      <animate attributeName="opacity" values="1;0.75;1" dur="0.35s" repeatCount="indefinite"/>
+    </path>
+  </g>
+</svg>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <radialGradient id="rb-bg">
+      <stop offset="0" stop-color="#7c3aed" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#3b0764" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="#1e1033"/>
+  <circle cx="50" cy="50" r="44" fill="url(#rb-bg)"/>
+  <g fill="none" stroke-width="6" stroke-linecap="round">
+    <path d="M14 72 A36 36 0 0 1 86 72" stroke="#ef4444">
+      <animate attributeName="stroke-dasharray" values="0,180;180,0" dur="4s" repeatCount="indefinite"/>
+    </path>
+    <path d="M18 70 A32 32 0 0 1 82 70" stroke="#f97316">
+      <animate attributeName="stroke-dasharray" values="0,160;160,0" dur="4s" begin="0.2s" repeatCount="indefinite"/>
+    </path>
+    <path d="M22 68 A28 28 0 0 1 78 68" stroke="#eab308">
+      <animate attributeName="stroke-dasharray" values="0,140;140,0" dur="4s" begin="0.4s" repeatCount="indefinite"/>
+    </path>
+    <path d="M26 66 A24 24 0 0 1 74 66" stroke="#22c55e">
+      <animate attributeName="stroke-dasharray" values="0,120;120,0" dur="4s" begin="0.6s" repeatCount="indefinite"/>
+    </path>
+    <path d="M30 64 A20 20 0 0 1 70 64" stroke="#3b82f6">
+      <animate attributeName="stroke-dasharray" values="0,100;100,0" dur="4s" begin="0.8s" repeatCount="indefinite"/>
+    </path>
+    <path d="M34 62 A16 16 0 0 1 66 62" stroke="#8b5cf6">
+      <animate attributeName="stroke-dasharray" values="0,80;80,0" dur="4s" begin="1s" repeatCount="indefinite"/>
+    </path>
+  </g>
+  <circle cx="18" cy="26" r="4" fill="#fde047">
+    <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="82" cy="28" r="3.5" fill="#fca5a5">
+    <animate attributeName="opacity" values="0.4;1;0.4" dur="2.4s" repeatCount="indefinite"/>
+  </circle>
+</svg>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <radialGradient id="tg-bg">
+      <stop offset="0" stop-color="#f43f5e" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#881337" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="#2a0f1a"/>
+  <circle cx="50" cy="50" r="44" fill="url(#tg-bg)"/>
+  <g fill="none" stroke-width="7">
+    <circle cx="50" cy="50" r="34" stroke="#f43f5e">
+      <animateTransform attributeName="transform" type="scale" values="1;0.92;1" dur="1.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="50" cy="50" r="24" stroke="#fbbf24">
+      <animateTransform attributeName="transform" type="scale" values="0.94;1.06;0.94" dur="1.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="50" cy="50" r="14" stroke="#22c55e">
+      <animateTransform attributeName="transform" type="scale" values="1.06;0.92;1.06" dur="1.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="50" cy="50" r="5" stroke="#ffffff">
+      <animate attributeName="r" values="4;6;4" dur="1.4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="1;0.6;1" dur="1.4s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  <circle cx="50" cy="50" r="3" fill="#ffffff"/>
+</svg>

@@ -1,1 +1,122 @@
-# Userbotttt
+# 🤖 Telegram-бот для управления роутером TP-Link Archer C80
+
+Классический асинхронный Telegram-бот на **Python + aiogram 3** с:
+
+- 🎮 **премиум-эмодзи в inline-кнопках** — каждый раздел и действие на кнопке с иконкой;
+- 🧭 **правильным роутингом** — единая центральная таблица маршрутов (`RouterRegistry`),
+  в которую все разделы регистрируются через `register(registry)`, один входной хендлер
+  для команд и один — для inline-кнопок, единая обработка ошибок и проверка прав администратора;
+- 📶 **полным управлением роутером TP-Link Archer C80** через TP-Link Cloud API
+  (тот же протокол, что использует приложение **Tether**): статус, клиенты, скорость,
+  переключение радио-сетей, смена SSID/пароля, перезагрузка;
+- 🎭 **демо-режимом (mock)** — виртуальный Archer C80 с изменяемым состоянием,
+  чтобы бот работал без оборудования.
+
+## 📁 Структура
+
+```
+run.py                    # входная точка: python run.py
+bot/
+├── main.py               # сборка Bot/Dispatcher, логирование, фоновое обновление статуса
+├── config.py             # настройки из переменных окружения (.env)
+├── entry.py              # входные точки aiogram: команды + inline-кнопки → таблица маршрутов
+├── registry.py           # RouterRegistry — центральная таблица маршрутов + права администратора
+├── render.py             # форматирование текстов (HTML + премиум-эмодзи)
+├── keyboards/
+│   ├── emoji.py          # набор премиум-эмодзи интерфейса
+│   └── menus.py          # inline-клавиатуры (в т.ч. динамические с ✅/❌ по сетям)
+├── routers/
+│   ├── menu.py           # главное меню, помощь
+│   ├── router_control.py # управление роутером (статусы, WiFi, перезагрузка)
+│   ├── commands.py       # /start /status /id /ping
+│   └── wifi_fsm.py       # FSM: пошаговый ввод SSID/пароля
+└── services/
+    └── tplink.py         # клиент TP-Link Cloud API + MockRouter + RouterService (кэш)
+```
+
+## 🚀 Запуск
+
+```bash
+# Python 3.11+
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+cp .env.example .env
+# укажите BOT_TOKEN от @BotFather
+python run.py
+```
+
+Логи: консоль и `logs/bot.log`.
+
+## 📦 Установка на сервер
+
+Готовый deploy-пакет в `deploy/` — пошаговый гид, авто-установщик, systemd-сервисы
+и nginx+HTTPS:
+
+- 📖 **`DEPLOY.md`** — полное руководство (ручная установка и автоматическая)
+- ⚡ **`deploy/install.sh`** — один фрагмент кода делает всё: пакеты, клонирование,
+  venv, `.env`, systemd, nginx, Let's Encrypt, запуск
+- 🔄 **`deploy/update.sh`** — обновление на сервере
+- 📜 **`deploy/telegram-bot.service`**, **`deploy/emoji-studio.service`** — сервисы systemd
+- 🌐 **`deploy/nginx-emoji-studio.conf`** — HTTPS-проксия для мини-приложения
+
+```bash
+sudo bash deploy/install.sh \
+  --repo https://github.com/FsbAidol/Telegram-Bot.git \
+  --domain your-domain.example.com \
+  --email you@example.com
+```
+
+## 🔌 Подключение роутера
+
+1. В приложении **TP-Link Tether** войдите в аккаунт TP-Link и добавьте Archer C80.
+2. В `.env` укажите `TPLINK_USER` / `TPLINK_PASSWORD` (аккаунт Tether) и `TPLINK_MODE=cloud`.
+3. Если в аккаунте несколько устройств, укажите `TPLINK_ALIAS` — имя роутера в Tether.
+
+Если аккаунт не задан или `TPLINK_MODE=mock`, бот управляет виртуальным роутером:
+все кнопки работают, состояние (включая включение/выключение сетей и смену SSID)
+хранится в памяти — это удобно для тестов и демонстрации.
+
+> Протокол: `POST https://a1.tplinkcloud.com`, шаги `login` (пароль в MD5) →
+> `tplinkcloud` с `dp_id`/`uid` и `requestData`. Методы: `getDeviceList`,
+> `getDeviceBasicFmt`, `setDeviceWifi` (index: 0 = 2.4 ГГц, 1 = 5 ГГц, 2 = Guest),
+> `reboot`, список клиентов (`getDeviceClientList` с авто-откатом к альтернативам).
+
+## 🎨 Эмодзи-студия (мини-приложение)
+
+Отдельный Telegram-мини-приложение в `mini-app/`: галерея премиум-эмодзи с
+плавными SVG-анимациями, тёмный премиум-интерфейс и Java-бэкенд.
+
+- **`mini-app/server/`** — Java-бэкенд на чистом JDK (`com.sun.net.httpserver`,
+  без зависимостей): статика + API `/api/emoji`, `/api/session`
+  (валидация Telegram WebApp initData по HMAC-SHA256) + CORS.
+- **`mini-app/web/`** — фронтендер без сборки: 12 анимированных SVG-эмодзи
+  (SMIL-циклы), движок JS-скриптов анимации на `requestAnimationFrame`,
+  анимированная аурора, частицы, модалка, копипаст.
+- Запуск: `cd mini-app && ./run.sh` (Java) или `python3 dev_server.py` (dev);
+  подробности — в `mini-app/README.md`.
+- Подключение: в `.env` бота `MINI_APP_URL=https://...` → в главном меню
+  появится кнопка **🎨 Эмодзи-студия** (`WebAppInfo`).
+
+## 🎮 Интерфейс
+
+| Кнопка | Действие |
+|---|---|
+| 🎮 Главное | сводка: онлайн/офлайн, модель, клиенты |
+| 📶 Роутер | меню управления: 📊 Статус, 📡 Устройства, ⚡ Скорость, 🔄 Перезагрузка, радио-сети с ✅/❌, ⚙️ SSID/пароль |
+| 📊 Скорость | загрузка/отдача с прогресс-барами |
+| ❓ Помощь | как работает бот |
+
+**Команды:** `/start` `/menu` `/status` `/id` `/ping`
+
+## 🧭 Роутинг и безопасность
+
+- Все маршруты — в одной таблице `RouterRegistry`: `@registry.route("router", "status")`
+  для кнопок и `@registry.command("status")` для команд.
+- `callback_data` по схеме `c:<area>:<action>[:arg:arg]` разбирается одним обработчиком.
+- Маршруты, меняющие состояние роутера (перезагрузка, WiFi, сеть), проверяются
+  через `SENSITIVE_ROUTES` и `ADMIN_IDS`.
+- Ошибки в любом маршруте ловятся в `@handled`, логируются с трейсбэком,
+  пользователь получает уведомление, бот не падает.
+- Фоновая задача обновляет кэш статуса роутера каждые `STATS_INTERVAL` секунд.

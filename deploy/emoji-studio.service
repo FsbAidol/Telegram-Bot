@@ -1,0 +1,24 @@
+[Unit]
+Description=Эмодзи-студия — Telegram-мини-приложение (Java)
+Documentation=https://github.com/FsbAidol/Telegram-Bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=telegram
+Group=telegram
+WorkingDirectory=/opt/telegram-bot/mini-app
+Environment=MINI_APP_PORT=8080
+Environment=MINI_APP_WEB=web
+# BOT_TOKEN для валидации /api/session передается через EnvironmentFile
+# бота (один токен для обоих компонентов); если нужна отдельная переменная,
+# добавить EnvironmentFile=/opt/telegram-bot/.env
+ExecStart=/opt/telegram-bot/mini-app/run.sh
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
