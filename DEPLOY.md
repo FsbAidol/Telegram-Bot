@@ -193,3 +193,5 @@ sudo systemctl restart telegram-bot emoji-studio
 | Service не стартует | `journalctl -u <service> -n 100`; проверить `.env` и права пользователя `telegram` |
 | Port 8080 занят | `MINI_APP_PORT=9090` в unit-файле и nginx-проксий на этот порт |
 | Java не компилируется | Установлен только JRE — нужен `openjdk-17-jdk-headless` (javac) |
+| `venv не создан ... ensurepip is not available` | На Ubuntu/Debian не установлен `python3-venv`: `apt install -y python3-venv` (или `python3.10-venv`), затем удалить старый `.venv` и создать новый |
+| `requirements.txt` / `.env.example` не найдены | Команды выполнены не внутри каталога репозитория — `cd` в папку после `git clone` |
