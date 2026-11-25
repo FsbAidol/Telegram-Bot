@@ -88,19 +88,24 @@ sudo -u telegram cp /opt/telegram-bot/.env.example /opt/telegram-bot/.env
 sudo nano /opt/telegram-bot/.env
 ```
 
-Заполнить:
+Заполнить. **Рекомендуемый режим — `lan`** (локальный HTTP-API роутера); облачный API роутеров TP-Link (`a1.tplinkcloud.com`) отключён производителем.
 
 ```ini
 BOT_TOKEN=6012345678:AAHdqTcvCH1vGWJxfSeofSAs0K5PALDsaw
 ADMIN_IDS=123456789,987654321
-TPLINK_MODE=cloud
-TPLINK_USER=you@tplinkcloud.com
-TPLINK_PASSWORD=пароль_аккаунта_Tether
-TPLINK_ALIAS=Archer-C80
+
+# Режим lan: бот должен быть в той же сети, что и роутер
+TPLINK_MODE=lan
+TPLINK_HOST=192.168.0.1
+TPLINK_PASSWORD=пароль_администратора_роутера
+TPLINK_ADMIN=admin
+
 STATS_INTERVAL=60
 # пока без HTTPS — сюда вернёмся на шаге 8
 MINI_APP_URL=
 ```
+
+> Режим `cloud` (аккаунт TP-Link из приложения Tether) оставлен для совместимости, но хост `a1.tplinkcloud.com` более не существует — если он работает у вас, укажите `TPLINK_CLOUD_URL` с рабочим эндпоинтом.
 
 ### 5. Сервисы systemd
 
@@ -191,7 +196,8 @@ sudo systemctl restart telegram-bot emoji-studio
 - Старые логи содержат ID пользователей и команды — чистите `logs/bot.log`
   при необходимости.
 - `ADMIN_IDS` — только ваш ID; иначе любой в Telegram сможет перезагружать роутер.
-- Роутер управляется через аккаунт TP-Link Cloud — используйте строгий пароль.
+- Роутер управляется через локальный HTTP-API — используйте строгий пароль администратора роутера.
+- Бот в режиме `lan` должен быть в той же сети, что и роутер; не открывайте интерфейс роутера в интернет без защиты (или используйте VPN).
 
 ## Частые проблемы
 
@@ -205,3 +211,4 @@ sudo systemctl restart telegram-bot emoji-studio
 | `venv не создан ... ensurepip is not available` | На Ubuntu/Debian не установлен `python3-venv`: `apt install -y python3-venv` (или `python3.10-venv`), затем удалить старый `.venv` и создать новый |
 | `requirements.txt` / `.env.example` не найдены | Команды выполнены не внутри каталога репозитория — `cd` в папку после `git clone` |
 | `Web App URL 'http://...' is invalid: Only HTTPS links are allowed` | `MINI_APP_URL` должен начинаться с `https://` (туннель cloudflared или домен + certbot). Если HTTPS ещё нет — оставьте `MINI_APP_URL` пустым: кнопка скроется и бот будет работать |
+| `Cannot connect to host a1.tplinkcloud.com` / `ClientConnectorDNSError` | Облачный API роутеров TP-Link отключён (хост мёртв). Переключитесь на `TPLINK_MODE=lan` и задайте `TPLINK_HOST` + `TPLINK_PASSWORD` (бот в сети роутера). Если бот не в той же сети — нужен VPN/шлюз к роутеру |

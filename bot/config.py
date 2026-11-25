@@ -14,10 +14,13 @@ class Settings:
     """Сборка настроек из окружения с защитой от пустых значений."""
 
     bot_token: str
-    tplink_mode: str = "mock"            # cloud | mock
+    tplink_mode: str = "mock"            # lan | cloud | mock
     tplink_user: str = ""
     tplink_password: str = ""
     tplink_alias: str = ""              # алиас роутера в аккаунте TP-Link (необязательно)
+    tplink_host: str = ""               # IP роутера для режима lan (например 192.168.0.1)
+    tplink_admin: str = ""              # логин роутера (по умолчанию admin)
+    tplink_cloud_url: str = ""          # эндпоинт TP-Link Cloud (по умолчанию a1.tplinkcloud.com)
     mini_app_url: str = ""              # URL Telegram-мини-приложения (кнопка WebApp)
     admin_ids: frozenset[int] = frozenset()
     stats_interval: int = 60            # секунды, через которые кэш статуса роутера обновляется
@@ -38,7 +41,7 @@ class Settings:
         )
 
         mode = os.getenv("TPLINK_MODE", "mock").strip().lower()
-        if mode not in {"cloud", "mock"}:
+        if mode not in {"lan", "cloud", "mock"}:
             mode = "mock"
 
         try:
@@ -52,6 +55,9 @@ class Settings:
             tplink_user=os.getenv("TPLINK_USER", "").strip(),
             tplink_password=os.getenv("TPLINK_PASSWORD", "").strip(),
             tplink_alias=os.getenv("TPLINK_ALIAS", "").strip(),
+            tplink_host=os.getenv("TPLINK_HOST", "").strip(),
+            tplink_admin=os.getenv("TPLINK_ADMIN", "admin").strip() or "admin",
+            tplink_cloud_url=os.getenv("TPLINK_CLOUD_URL", "").strip(),
             mini_app_url=os.getenv("MINI_APP_URL", "").strip(),
             admin_ids=admins,
             stats_interval=interval,

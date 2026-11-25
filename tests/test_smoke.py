@@ -221,6 +221,62 @@ class TestRouterServiceMock(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(service.mode, "cloud")
         self.assertIn("cloud", service.mode_reason())
 
+    def test_lan_mode(self) -> None:
+        service = RouterService(make_settings(tplink_mode="lan"))
+        self.assertEqual(service.mode, "mock")  # без IP и пароля — mock
+        self.assertIn("TPLINK_HOST", service.mode_reason())
+
+        service = RouterService(make_settings(
+            tplink_mode="lan", tplink_host="192.168.0.1"
+        ))
+        self.assertEqual(service.mode, "mock")
+        self.assertIn("TPLINK_PASSWORD", service.mode_reason())
+
+        service = RouterService(make_settings(
+            tplink_mode="lan", tplink_host="192.168.0.1", tplink_password="pw"
+        ))
+        self.assertEqual(service.mode, "lan")
+        self.assertIn("lan", service.mode_reason())
+
+    def test_parse_lan_status(self) -> None:
+        from bot.services.tplink import parse_lan_clients, parse_lan_status
+        data = {
+            "lan_macaddr": "50:3E:AA:AB:CD:EF",
+            "wan_ipv4_ipaddr": "185.124.221.45",
+            "wan_ipv4_uptime": "86400",
+            "cpu_usage": "17",
+            "mem_usage": "34",
+            "wireless_2g_enable": "on",
+            "wireless_2g_ssid": "HomeWiFi-2G",
+            "wireless_5g_enable": "on",
+            "wireless_5g_ssid": "HomeWiFi-5G",
+            "guest_2g_enable": "off",
+            "guest_2g_ssid": "GuestWiFi",
+            "access_devices_wired": [
+                {"hostname": "ПК", "ipaddr": "192.168.1.5", "macaddr": "AA:BB:CC:00:00:01"}
+            ],
+            "access_devices_wireless_host": [
+                {"hostname": "iPhone", "ipaddr": "192.168.1.10",
+                 "macaddr": "AA:BB:CC:00:00:02", "wire_type": "5G"},
+                {"hostname": "TV", "ipaddr": "192.168.1.12",
+                 "macaddr": "AA:BB:CC:00:00:03", "wire_type": "2.4G"},
+            ],
+        }
+        status = parse_lan_status(data, mode="lan")
+        self.assertEqual(status.mode, "lan")
+        self.assertEqual(status.wan_ip, "185.124.221.45")
+        self.assertEqual(status.total_clients, 3)
+        self.assertEqual(status.network("24").ssid, "HomeWiFi-2G")
+        self.assertEqual(status.network("24").clients, 1)
+        self.assertEqual(status.network("5").clients, 1)
+        self.assertEqual(status.uptime, "1 дн 0 ч")
+
+        clients = parse_lan_clients(data)
+        self.assertEqual(len(clients), 3)
+        self.assertEqual(clients[0].band, "провод")
+        self.assertEqual(clients[1].band, "5 ГГц")
+        self.assertEqual(clients[2].band, "2.4 ГГц")
+
 
 class TestHandlers(unittest.IsolatedAsyncioTestCase):
     def test_callback_flow(self) -> None:
